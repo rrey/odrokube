@@ -1,0 +1,9 @@
+---
+
+- hosts: odroid
+  gather_facts: false
+  become: yes
+  roles:
+  - initdroid
+
+...

@@ -1,0 +1,43 @@
+---
+
+- name: Install python
+  raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
+
+- name: Ensure ansible user exists
+  user:
+    name: "{{ initdroid_ansible_user }}"
+    state: present
+    comment: Ansible
+
+- name: Enable including files from sudoers.d/
+  lineinfile:
+    path: "/etc/sudoers"
+    regexp: "^#includedir /etc/sudoers.d"
+    line: "#includedir /etc/sudoers.d"
+    state: "present"
+    backup: True
+
+- name: Enable passwordless sudo
+  copy:
+    content: "%{{ initdroid_ansible_user }} ALL=(ALL) NOPASSWD:ALL"
+    dest: "/etc/sudoers.d/{{ initdroid_ansible_user }}"
+    owner: "root"
+    group: "root"
+    mode: "0440"
+
+- name: Set authorized key from file
+  authorized_key:
+    user: "{{ initdroid_ansible_user }}"
+    state: present
+    key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+
+- name: Disable root login
+  lineinfile:
+    path: "/etc/ssh/sshd_config"
+    regexp: "^PermitRootLogin"
+    line: "PermitRootLogin no"
+    state: "present"
+    backup: True
+  notify: Restart sshd
+
+...
