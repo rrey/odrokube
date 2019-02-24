@@ -3,11 +3,22 @@
 - name: Install python
   raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
 
+- name: Update and upgrade apt packages
+  apt:
+    upgrade: yes
+    update_cache: yes
+    cache_valid_time: 86400
+
+- name: Set a pretty hostname
+  hostname:
+    name: "{{ inventory_hostname }}"
+
 - name: Ensure ansible user exists
   user:
     name: "{{ initdroid_ansible_user }}"
     state: present
     comment: Ansible
+    shell: /bin/bash
 
 - name: Enable including files from sudoers.d/
   lineinfile:
