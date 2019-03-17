@@ -1,0 +1,8 @@
+---
+
+k3s_github_url: https://github.com/rancher/k3s
+k3s_version: "v0.2.0"
+k3s_arch: "-arm64"
+k3s_master: no
+
+...

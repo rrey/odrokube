@@ -1,0 +1,16 @@
+---
+
+- stat:
+    path: /var/lib/rancher/k3s/server/node-token
+  register: node_token_file
+
+- name: Fetch the node token
+  command: "cat /var/lib/rancher/k3s/server/node-token"
+  register: node_token
+
+- name: set node_token fact
+  set_fact:
+    k3s_node_token: "{{ node_token.stdout }}"
+  when: "node_token_file.stat.exists"
+
+...

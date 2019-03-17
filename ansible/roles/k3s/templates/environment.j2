@@ -1,0 +1,3 @@
+{% if not k3s_master %}
+NODE_TOKEN={{ hostvars[groups["kube-masters"][0]]["k3s_node_token"] }}
+{% endif %}

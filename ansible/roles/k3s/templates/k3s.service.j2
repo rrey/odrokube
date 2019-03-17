@@ -1,0 +1,23 @@
+[Unit]
+Description=Lightweight Kubernetes
+Documentation=https://k3s.io
+After=network.target
+
+[Service]
+EnvironmentFile=/etc/rancher/k3s/environment
+ExecStartPre=-/sbin/modprobe br_netfilter
+ExecStartPre=-/sbin/modprobe overlay
+{% if k3s_master %}
+ExecStart=/usr/local/bin/k3s server
+{% else %}
+ExecStart=/usr/local/bin/k3s agent --server https://{{ hostvars[groups["kube-masters"][0]]["ansible_default_ipv4"]["address"] }}:6443 --token ${NODE_TOKEN}
+{% endif %}
+KillMode=process
+Delegate=yes
+LimitNOFILE=infinity
+LimitNPROC=infinity
+LimitCORE=infinity
+TasksMax=infinity
+
+[Install]
+WantedBy=multi-user.target

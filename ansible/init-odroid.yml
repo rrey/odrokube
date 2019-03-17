@@ -1,9 +1,23 @@
 ---
 
-- hosts: odroid
-  gather_facts: false
+- hosts: all
   become: yes
   roles:
-  - initdroid
+    - role: initdroid
+      tags: init
+
+- hosts: kube-masters
+  become: yes
+  roles:
+    - role: k3s
+      tags: k3s
+    - role: get_node_token
+      tags: k3s
+
+- hosts: kube-workers
+  become: yes
+  roles:
+    - role: k3s
+      tags: k3s
 
 ...

@@ -1,7 +1,12 @@
 ---
 
-- name: Install python
-  raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
+- block:
+    - name: Python is install
+      apt:
+        name: python
+  rescue:
+    - name: Install python
+      raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
 
 - name: Update and upgrade apt packages
   apt:
@@ -50,5 +55,10 @@
     state: "present"
     backup: True
   notify: Restart sshd
+
+- name:
+  lineinfile:
+    path: /etc/hosts
+    line: "{{ ansible_default_ipv4.address }}    {{ inventory_hostname }}"
 
 ...

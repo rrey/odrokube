@@ -1,0 +1,42 @@
+---
+
+- name: create config directory
+  file:
+    state: directory
+    path: /etc/rancher/k3s/
+
+- stat:
+    path: /usr/local/bin/k3s
+  register: k3s
+
+- name: Download binary
+  get_url:
+    url: "{{ k3s_github_url }}/releases/download/{{ k3s_version }}/k3s{{ k3s_arch }}"
+    dest: /usr/local/bin/k3s
+  when: "not k3s.stat.exists"
+
+- name: Set permissions on binary
+  file:
+    path: /usr/local/bin/k3s
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: Install systemd unit file
+  template:
+    src: k3s.service.j2
+    dest: /etc/systemd/system/k3s.service
+  notify: restart k3s
+
+- name: Install the environment file
+  template:
+    src: environment.j2
+    dest: /etc/rancher/k3s/environment
+  notify: restart k3s
+
+- name: enable k3s service
+  systemd:
+    name: k3s
+    enabled: yes
+
+...
