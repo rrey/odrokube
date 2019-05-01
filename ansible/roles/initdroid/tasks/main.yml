@@ -56,7 +56,7 @@
     backup: True
   notify: Restart sshd
 
-- name:
+- name: Update /etc/hosts with host address
   lineinfile:
     path: /etc/hosts
     line: "{{ ansible_default_ipv4.address }}    {{ inventory_hostname }}"

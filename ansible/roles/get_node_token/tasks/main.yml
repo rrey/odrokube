@@ -6,6 +6,7 @@
 
 - name: Fetch the node token
   command: "cat /var/lib/rancher/k3s/server/node-token"
+  changed_when: false
   register: node_token
 
 - name: set node_token fact
