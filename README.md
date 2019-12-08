@@ -9,23 +9,23 @@ The boards are running [Armbian Bionic 4.19](https://www.armbian.com/odroid-c2/)
 
 ## Ansible inventory
 
-In my setup, I configured my DHCP to assign static addresses for each boards
-allowing to create the ansible inventory `ansible/inv.ini`:
+In my setup, I configured the DNS of my ISP to assign DNS anmes to the boards based on their static
+addresses. It allows to create the ansible inventory `ansible/inv.ini`:
 
 ```
 [odroid]
-odroid-01 ansible_host=192.168.0.30
-odroid-02 ansible_host=192.168.0.31
-odroid-03 ansible_host=192.168.0.32
-odroid-04 ansible_host=192.168.0.33
+odroid01
+odroid02
+odroid03
+odroid04
 
 [kube-masters]
-odroid-02
+odroid02
 
 [kube-workers]
-odroid-01
-odroid-03
-odroid-04
+odroid01
+odroid03
+odroid04
 ```
 
 The `kube-masters` defines the boards where k3s will be configured to act as a `master` nodes.
