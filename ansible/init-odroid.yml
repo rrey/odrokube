@@ -8,6 +8,7 @@
 
 - hosts: kube-masters
   become: yes
+  serial: 1
   roles:
     - role: k3s
       tags: k3s
@@ -16,6 +17,7 @@
 
 - hosts: kube-workers
   become: yes
+  serial: 1
   roles:
     - role: k3s
       tags: k3s

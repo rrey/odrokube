@@ -5,4 +5,9 @@
     name: sshd
     state: restarted
 
+- name: Restart haveged
+  systemd:
+    name: haveged
+    state: restarted
+
 ...

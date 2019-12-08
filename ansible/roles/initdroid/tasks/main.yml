@@ -61,4 +61,21 @@
     path: /etc/hosts
     line: "{{ ansible_default_ipv4.address }}    {{ inventory_hostname }}"
 
+- name: ensure haveged is installed
+  package:
+    name: haveged
+    state: present
+
+- name: start haveged
+  systemd:
+    name: haveged
+    state: started
+
+- name: fix issue with haveged
+  copy:
+    src: haveged.service
+    dest: /lib/systemd/system/haveged.service
+  notify:
+    - Restart haveged
+
 ...

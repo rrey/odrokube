@@ -1,4 +1,6 @@
-# odrokube
+# ODROKUBE
+
+A Kubernetes cluster ([k3s](https://github.com/rancher/k3s)) on [odroid](https://www.hardkernel.com/shop/odroid-c2/) boards.
 
 ![My odrokube](./img/odrokube.jpg)
 
