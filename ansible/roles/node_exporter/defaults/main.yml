@@ -1,0 +1,10 @@
+---
+
+node_exporter_version: 0.18.1
+node_exporter_arch: arm64
+node_exporter_base_url: https://github.com/prometheus/node_exporter/releases/download
+node_exporter_dir_name: "node_exporter-{{ node_exporter_version }}.linux-{{ node_exporter_arch }}"
+node_exporter_archive_name: "{{ node_exporter_dir_name }}.tar.gz"
+node_exporter_url: "{{ node_exporter_base_url }}/v{{ node_exporter_version }}/{{ node_exporter_archive_name }}"
+
+...

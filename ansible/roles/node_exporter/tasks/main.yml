@@ -1,0 +1,56 @@
+---
+
+- name: create node_exporter user
+  user:
+    name: node_exporter
+    shell: /sbin/nologin
+
+- name: Check if node-exporter exists
+  stat:
+    path: /usr/sbin/node_exporter
+  register: exporter_stat
+
+- debug:
+    var: exporter_stat
+
+- name: Get node_exporter
+  get_url:
+    url: "{{ node_exporter_url }}"
+    dest: /tmp/
+  when: not exporter_stat.stat.exists
+
+- name: unarchive node-exporter
+  unarchive:
+    src: "/tmp/{{ node_exporter_archive_name }}"
+    dest: /tmp/
+    remote_src: yes
+
+- name: move binary to /usr/sbin
+  copy:
+    src: "/tmp/{{ node_exporter_dir_name }}/node_exporter"
+    dest: /usr/sbin/
+    remote_src: yes
+    mode: "0755"
+
+- name: copy unit file
+  copy:
+    src: node_exporter.service
+    dest: /etc/systemd/system/node_exporter.service
+
+- name: copy sysconfig
+  copy:
+    src: sysconfig.node_exporter
+    dest: /etc/sysconfig/node_exporter
+  notify:
+    - Restart node-exporter
+
+- name: start node-exporter
+  systemd:
+    name: node_exporter
+    state: started
+
+- name: Wait for node-exporter
+  wait_for:
+    port: 9100
+
+...
