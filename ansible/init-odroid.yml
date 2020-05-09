@@ -5,8 +5,8 @@
   roles:
     - role: initdroid
       tags: init
-    - role: node_exporter
-      tags: monitoring
+      #    - role: node_exporter
+      #      tags: monitoring
 
 - hosts: kube-masters
   become: yes
