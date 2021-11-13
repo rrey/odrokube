@@ -1,12 +1,7 @@
 ---
 
-- block:
-    - name: Python is install
-      apt:
-        name: python
-  rescue:
-    - name: Install python
-      raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
+- name: Install python
+  raw: test -e /usr/bin/python3 || (apt -y update && apt install -y python3 python3-pip && pip3 install --upgrade pip)
 
 - name: Update and upgrade apt packages
   apt:

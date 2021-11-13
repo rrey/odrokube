@@ -20,7 +20,7 @@
   - name: re-read facts after adding custom fact
     setup:
       filter: ansible_local
-  when: "not k3s_facts.stat.exists"
+    changed_when: false
 
 - name: create config directory
   file:
@@ -36,7 +36,7 @@
     url: "{{ k3s_github_url }}/releases/download/{{ k3s_version }}/k3s{{ k3s_arch }}"
     dest: /usr/local/bin/k3s
     force: yes
-  when: "not k3s.stat.exists or ansible_local.k3s.meta.version != k3s_version"
+  when: "not k3s.stat.exists or (ansible_local | default({'meta': { 'version': '' }})).meta.version != k3s_version"
   notify:
    - restart k3s
 
